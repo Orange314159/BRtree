@@ -5,31 +5,22 @@
 
 using namespace std;
 
-struct node
-{#ifndef RBTREE_H
-#define RBTREE_H
-
-
-#include <iostream>
-
-using namespace std;
-
 #define RED 1
 #define BLACK 0
 
 struct Node {
-	int key;
-	Node *parent; 
-	Node *left;
-	Node *right; 
-	int color; // 1 -> Red, 0 -> Black
+	int key = 0;
+	Node *parent = nullptr; 
+	Node *left = nullptr;
+	Node *right = nullptr; 
+	int color = 0; // 1 -> Red, 0 -> Black
 };
 
 
 class RBtree {
 private:
-	Node* root;
-	Node* NIL;
+	Node* root = nullptr;
+	Node* NIL = nullptr;
 
 	void preOrderTraverse(Node* node);
 	void inOrderTraverse(Node* node);
@@ -39,11 +30,9 @@ private:
 
 
 	void fixRemove(Node* x);
+	void fixInsert(Node* k);
 	void transplant(Node* u, Node* v);
 	void removeNodeRecursive(Node* node, int key);
-	
-	void fixInsert(Node* k);
-
 	void printTraverse(Node* root, string indent, bool last);
 
 public:
@@ -67,35 +56,4 @@ public:
 
 };
 
-
-
-
-
 #endif // RBTREE_H
-
-       int key;
-       node *parent;
-       char color;
-       node *left;
-       node *right;
-};
-class RBtree
-{
-      node *root;
-      node *q;
-   public :
-      RBtree()
-      {
-              q=NULL;
-              root=NULL;
-      }
-      void insert();
-      void leftrotate(node *);
-      void rightrotate(node *);
-      void del();
-      node* successor(node *);
-      void display( node *);
-      void search();
-};
-
-#endif

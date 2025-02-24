@@ -23,8 +23,7 @@
 using namespace std;
 
 
-struct ds_operation
-{
+struct ds_operation {
 	char	op;
 	int		data;
 };
@@ -34,8 +33,7 @@ struct ds_operation
  * @param str - a string of a single element in the form of <operation> : <data>
  * @return struct ds_operation -  the decoded string
  */
-ds_operation decode(string str)
-{
+ds_operation decode(string str) {
 	char sep;
 	ds_operation dsop;
 	stringstream s_str(str);
@@ -56,8 +54,7 @@ ds_operation decode(string str)
  * @return a vecor containg an ordered series of decoded operations
  */
 
-vector<ds_operation> segment(string str)
-{
+vector<ds_operation> segment(string str) {
 	vector<ds_operation> result;
 	stringstream s_stream(str); 		//create string stream from the string
 	while(s_stream.good()) {
@@ -85,9 +82,8 @@ vector<ds_operation> segment(string str)
 
 //void vprint(auto const &vector)
 
-void vprint(vector<ds_operation> vec)
-{
-  cout << "size: " << vec.size() << endl;
+void vprint(vector<ds_operation> vec) {
+	cout << "size: " << vec.size() << endl;
 	for (auto i: vec) {
 		std::cout << i.op << " - " << i.data << endl;
 	}
@@ -96,8 +92,7 @@ void vprint(vector<ds_operation> vec)
 }
 
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
   std::cout << "Hello RB trees" << std::endl;
   
   RBtree rb;

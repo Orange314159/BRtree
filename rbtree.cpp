@@ -8,8 +8,7 @@ RBtree::RBtree() {
 	root = NIL;
 }
 
-RBtree::~RBtree()
-{
+RBtree::~RBtree(){
 }
 
 
@@ -156,40 +155,142 @@ void RBtree::removeNodeRecursive(Node* node, int key) {
 
 
 void RBtree::fixInsert(Node* k){
+	while (k != root && k->parent->color == RED) {
 
-  /* * * * * * * * * */
-  /* Your code here  */
-  /* * * * * * * * * */
-
+		if (k->parent == k->parent->parent->left) {
+			// check uncle
+			Node* uncle = k->parent->parent->right; 
+			if (uncle->color == RED) {
+				k->parent->color = BLACK;
+				uncle->color = BLACK;
+				k->parent->parent->color = RED;
+				k = k->parent->parent;
+			} else {
+				if (k == k->parent->right) {
+					k = k->parent;
+					leftRotate(k);
+				}
+				k->parent->color = BLACK;
+				k->parent->parent->color = RED;
+				rightRotate(k->parent->parent);
+			}
+		} else {
+			// check uncle
+			Node* uncle = k->parent->parent->left;
+			if (uncle->color == RED) {
+				k->parent->color = BLACK;
+				uncle->color = BLACK;
+				k->parent->parent->color = RED;
+				k = k->parent->parent;
+			} else {
+				if (k == k->parent->left) {
+					k = k->parent;
+					rightRotate(k);
+				}
+				k->parent->color = BLACK;
+				k->parent->parent->color = RED;
+				leftRotate(k->parent->parent);
+			}
+		}
+	}
+	root->color = BLACK;
 }
 
 void RBtree::leftRotate(Node* x) {
-  /* * * * * * * * * */
-  /* Your code here  */
-  /* * * * * * * * * */
+	// traditional left rotation method
+	Node* y = x->right;
+	x->right = y->left;
+
+	if (y->left != NIL) {
+		y->left->parent = x;
+	}
+
+	y->parent = x->parent;
+
+	if (x->parent == nullptr) {
+		root = y;
+	} else if (x == x->parent->left) {
+		x->parent->left = y;
+	} else {
+		x->parent->right = y;
+	}
+	
+	y->left = x;
+	x->parent = y;
 }
 
 
 void RBtree::rightRotate(Node* x) {
-  /* * * * * * * * * */
-  /* Your code here  */
-  /* * * * * * * * * */
-}
+	// traditional right rotation method
+	Node* y = x->left; 
+	x->left = y->right;
 
+	if (y->right != NIL) {
+		y->right->parent = x;
+	}
+
+	y->parent = x->parent;
+
+	if (x->parent == nullptr) {
+		root = y;
+	} else if (x == x->parent->right) {
+		x->parent->right = y;
+	} else {
+		x->parent->left = y;
+	}
+
+	y->right = x;
+	x->parent = y;
+}
 
 
 void RBtree::insert(int key) {
-  /* * * * * * * * * */
-  /* Your code here  */
-  /* * * * * * * * * */
 
+	// create a the new node
+	Node* new_node = new Node();
+	new_node->key = key;
+	new_node->color = BLACK;
+	new_node->left = NIL;
+	new_node->right = NIL;
 
-	fixInsert(node);
+	// traverse the nodes
+	Node* parent = nullptr;
+	Node* current = root;
+
+	// insert the new node using a traditional BST insert
+	while (current != NIL) {
+		parent = current;
+		if (new_node->key < current->key) {
+			current = current->left;
+		}
+		else {
+			current = current->right;
+		}
+	}
+
+	// set the parent of the new node
+	new_node->parent = parent;
+
+	// case: the tree is empty
+	if (parent == nullptr) {
+		root = new_node;
+	} else if (new_node->key < parent->key) { // case: the new node is less than the parent
+		parent->left = new_node;
+	} else {
+		parent->right = new_node; // case: the new node is greater than the parent
+	}
+
+	if (new_node->parent == nullptr) { // case: the new node is the root
+		new_node->color = BLACK;
+		return;
+	}
+
+	if (new_node->parent->parent == nullptr) { // case: the parent of the new node is the root
+		return;
+	}
+	
+	fixInsert(new_node); // fix the tree (rebalance and coloring)
 }
-
-
-
-
 
 
 void RBtree::printTraverse(Node* root, string indent, bool last) {
@@ -216,7 +317,6 @@ void RBtree::printTraverse(Node* root, string indent, bool last) {
 void RBtree::preorder() {
 	RBtree::preOrderTraverse(this->root);
 }
-
 void RBtree::preOrderTraverse(Node* node) {
 	if (node != NIL) {
 		cout<<node->key<<" ";
