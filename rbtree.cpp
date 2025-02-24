@@ -98,6 +98,13 @@ void RBtree::transplant(Node* u, Node* v){
 }
 
 void RBtree::remove(int key) {
+	if (root == nullptr) {
+		cout<<"tree is empty"<<endl;
+		return;
+	} else if (searchTree(key) == NIL) {
+		cout<<"key not found in the tree"<<endl;
+		return;
+	}
 	removeNodeRecursive(this->root, key);
 }
 
